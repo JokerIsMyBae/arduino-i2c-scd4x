@@ -56,16 +56,6 @@ class SensirionI2CScd4x {
     void begin(TwoWire& i2cBus);
 
     /**
-     * startPeriodicMeasurement() - start periodic measurement, signal update
-     * interval is 5 seconds.
-     *
-     * @note This command is only available in idle mode.
-     *
-     * @return 0 on success, an error code otherwise
-     */
-    uint16_t startPeriodicMeasurement(void);
-
-    /**
      * readMeasurementTicks() - read sensor output. The measurement data can
      * only be read out once per signal update interval as the buffer is emptied
      * upon read-out. If no data is available in the buffer, the sensor returns
@@ -110,16 +100,6 @@ class SensirionI2CScd4x {
      */
     uint16_t readMeasurement(uint16_t& co2, float& temperature,
                              float& humidity);
-
-    /**
-     * stopPeriodicMeasurement() - Stop periodic measurement and return to idle
-     * mode for sensor configuration or to safe energy.
-     *
-     * @note This command is only available in measurement mode.
-     *
-     * @return 0 on success, an error code otherwise
-     */
-    uint16_t stopPeriodicMeasurement(void);
 
     /**
      * getTemperatureOffsetTicks() - The temperature offset represents the
@@ -223,26 +203,6 @@ class SensirionI2CScd4x {
      * @return 0 on success, an error code otherwise
      */
     uint16_t setAmbientPressure(uint16_t ambientPressure);
-
-    /**
-     * performForcedRecalibration() - To successfully conduct an accurate forced
-    recalibration, the following steps need to be carried out:
-    1. Operate the SCD4x in a periodic measurement mode for > 3 minutes in an
-    environment with homogenous and constant CO₂ concentration.
-    2. Stop periodic measurement. Wait 500 ms.
-    3. Subsequently issue the perform_forced_recalibration command and
-    optionally read out the baseline correction. A return value of 0xffff
-    indicates that the forced recalibration failed.
-     *
-     * @param targetCo2Concentration Target CO₂ concentration in ppm.
-     *
-     * @param frcCorrection FRC correction value in CO₂ ppm or 0xFFFF if the
-    command failed. Convert value to CO₂ ppm with: value - 0x8000
-     *
-     * @return 0 on success, an error code otherwise
-     */
-    uint16_t performForcedRecalibration(uint16_t targetCo2Concentration,
-                                        uint16_t& frcCorrection);
 
     /**
      * getAutomaticSelfCalibration() - By default, the ASC is enabled.
@@ -358,44 +318,6 @@ class SensirionI2CScd4x {
                              uint16_t& serial2);
 
     /**
-     * performSelfTest() - The perform_self_test feature can be used as an
-     * end-of-line test to confirm sensor functionality.
-     *
-     * @param sensorStatus 0 means no malfunction detected
-     *
-     * @return 0 on success, an error code otherwise
-     */
-    uint16_t performSelfTest(uint16_t& sensorStatus);
-
-    /**
-     * performFactoryReset() - Initiates the reset of all configurations stored
-     * in the EEPROM and erases the FRC and ASC algorithm history.
-     *
-     * @note To avoid unnecessary wear of the EEPROM, this command should only
-     * be sent when actual changes to the configuration have been made which
-     * should be reverted (The EEPROM is guaranteed to endure at least 2000
-     * write cycles before failure). Note that field calibration history (i.e.
-     * FRC and ASC) is automatically stored in a separate EEPROM dimensioned for
-     * specified sensor lifetime.
-     *
-     * @return 0 on success, an error code otherwise
-     */
-    uint16_t performFactoryReset(void);
-
-    /**
-     * reinit() - The reinit command reinitializes the sensor by reloading user
-     * settings from EEPROM. Before sending the reinit command, the stop
-     * measurement command must be issued. If reinit command does not trigger
-     * the desired re-initialization, a power-cycle should be applied to the
-     * SCD4x.
-     *
-     * @note Only available in idle mode.
-     *
-     * @return 0 on success, an error code otherwise
-     */
-    uint16_t reinit(void);
-
-    /**
      * measureSingleShot() - On-demand measurement of CO₂ concentration,
      * relative humidity and temperature. The sensor output is read with the
      * read_measurement command.
@@ -405,16 +327,6 @@ class SensirionI2CScd4x {
      * @return 0 on success, an error code otherwise
      */
     uint16_t measureSingleShot(void);
-
-    /**
-     * measureSingleShotRhtOnly() - On-demand measurement of relative humidity
-     * and temperature only.
-     *
-     * @note Only available in idle mode.
-     *
-     * @return 0 on success, an error code otherwise
-     */
-    uint16_t measureSingleShotRhtOnly(void);
 
     /**
      * powerDown() - Put the sensor from idle to sleep mode to reduce current
