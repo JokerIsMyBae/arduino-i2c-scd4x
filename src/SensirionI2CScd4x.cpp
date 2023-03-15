@@ -41,13 +41,12 @@
 #include "SensirionCore.h"
 #include <Wire.h>
 
-#define SCD4X_I2C_ADDRESS 0x62
-
 SensirionI2CScd4x::SensirionI2CScd4x() {
 }
 
-void SensirionI2CScd4x::begin(TwoWire& i2cBus) {
+void SensirionI2CScd4x::begin(TwoWire& i2cBus, uint8_t i2cAddr) {
     _i2cBus = &i2cBus;
+    _i2cAddr = i2cAddr;
 }
 
 uint16_t SensirionI2CScd4x::readMeasurementTicks(uint16_t& co2,
@@ -62,8 +61,7 @@ uint16_t SensirionI2CScd4x::readMeasurementTicks(uint16_t& co2,
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -71,8 +69,8 @@ uint16_t SensirionI2CScd4x::readMeasurementTicks(uint16_t& co2,
     delay(1);
 
     SensirionI2CRxFrame rxFrame(buffer, 9);
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 9,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 9, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -109,8 +107,7 @@ uint16_t SensirionI2CScd4x::getTemperatureOffsetTicks(uint16_t& tOffset) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -118,8 +115,8 @@ uint16_t SensirionI2CScd4x::getTemperatureOffsetTicks(uint16_t& tOffset) {
     delay(1);
 
     SensirionI2CRxFrame rxFrame(buffer, 3);
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 3,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 3, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -152,8 +149,7 @@ uint16_t SensirionI2CScd4x::setTemperatureOffsetTicks(uint16_t tOffset) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(1);
     return error;
 }
@@ -174,8 +170,7 @@ uint16_t SensirionI2CScd4x::getSensorAltitude(uint16_t& sensorAltitude) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -183,8 +178,8 @@ uint16_t SensirionI2CScd4x::getSensorAltitude(uint16_t& sensorAltitude) {
     delay(1);
 
     SensirionI2CRxFrame rxFrame(buffer, 3);
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 3,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 3, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -204,8 +199,7 @@ uint16_t SensirionI2CScd4x::setSensorAltitude(uint16_t sensorAltitude) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(1);
     return error;
 }
@@ -221,8 +215,7 @@ uint16_t SensirionI2CScd4x::setAmbientPressure(uint16_t ambientPressure) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(1);
     return error;
 }
@@ -237,8 +230,7 @@ uint16_t SensirionI2CScd4x::getAutomaticSelfCalibration(uint16_t& ascEnabled) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -246,8 +238,8 @@ uint16_t SensirionI2CScd4x::getAutomaticSelfCalibration(uint16_t& ascEnabled) {
     delay(1);
 
     SensirionI2CRxFrame rxFrame(buffer, 3);
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 3,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 3, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -267,8 +259,7 @@ uint16_t SensirionI2CScd4x::setAutomaticSelfCalibration(uint16_t ascEnabled) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(1);
     return error;
 }
@@ -284,8 +275,7 @@ uint16_t SensirionI2CScd4x::getAutomaticSelfCalibrationInitialPeriod(
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -293,8 +283,8 @@ uint16_t SensirionI2CScd4x::getAutomaticSelfCalibrationInitialPeriod(
     delay(1);
 
     SensirionI2CRxFrame rxFrame(buffer, 3);
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 3,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 3, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -314,8 +304,7 @@ uint16_t SensirionI2CScd4x::getAutomaticSelfCalibrationStandardPeriod(
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -323,8 +312,8 @@ uint16_t SensirionI2CScd4x::getAutomaticSelfCalibrationStandardPeriod(
     delay(1);
 
     SensirionI2CRxFrame rxFrame(buffer, 3);
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 3,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 3, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -345,8 +334,7 @@ uint16_t SensirionI2CScd4x::setAutomaticSelfCalibrationInitialPeriod(
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(1);
     return error;
 }
@@ -363,8 +351,7 @@ uint16_t SensirionI2CScd4x::setAutomaticSelfCalibrationStandardPeriod(
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(1);
     return error;
 }
@@ -379,8 +366,7 @@ uint16_t SensirionI2CScd4x::startLowPowerPeriodicMeasurement() {
         return error;
     }
 
-    return SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                *_i2cBus);
+    return SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
 }
 
 uint16_t SensirionI2CScd4x::getDataReadyFlag(bool& dataReady) {
@@ -394,8 +380,7 @@ uint16_t SensirionI2CScd4x::getDataReadyFlag(bool& dataReady) {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -404,8 +389,8 @@ uint16_t SensirionI2CScd4x::getDataReadyFlag(bool& dataReady) {
 
     SensirionI2CRxFrame rxFrame(buffer, 3);
     // Changes the frame itself with pointer
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 3,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 3, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -426,8 +411,7 @@ uint16_t SensirionI2CScd4x::persistSettings() {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(800);
     return error;
 }
@@ -444,8 +428,7 @@ uint16_t SensirionI2CScd4x::getSerialNumber(uint16_t& serial0,
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -453,8 +436,8 @@ uint16_t SensirionI2CScd4x::getSerialNumber(uint16_t& serial0,
     delay(1);
 
     SensirionI2CRxFrame rxFrame(buffer, 9);
-    error = SensirionI2CCommunication::receiveFrame(SCD4X_I2C_ADDRESS, 9,
-                                                    rxFrame, *_i2cBus);
+    error =
+        SensirionI2CCommunication::receiveFrame(_i2cAddr, 9, rxFrame, *_i2cBus);
     if (error) {
         return error;
     }
@@ -475,8 +458,7 @@ uint16_t SensirionI2CScd4x::measureSingleShot() {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(5000);
     return error;
 }
@@ -491,8 +473,7 @@ uint16_t SensirionI2CScd4x::powerDown() {
         return error;
     }
 
-    error = SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS, txFrame,
-                                                 *_i2cBus);
+    error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
     delay(1);
     return error;
 }
@@ -508,8 +489,8 @@ uint16_t SensirionI2CScd4x::wakeUp() {
     }
 
     // Sensor does not acknowledge the wake-up call, error is ignored
-    static_cast<void>(SensirionI2CCommunication::sendFrame(SCD4X_I2C_ADDRESS,
-                                                           txFrame, *_i2cBus));
+    static_cast<void>(
+        SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus));
     delay(20);
     return NoError;
 }

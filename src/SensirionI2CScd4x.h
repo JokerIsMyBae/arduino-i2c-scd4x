@@ -51,9 +51,10 @@ class SensirionI2CScd4x {
      * begin() - Initializes the SensirionI2CScd4x class.
      *
      * @param i2cBus Arduino stream object to use for communication.
+     * @param i2cAddr I2C address of the sensor.
      *
      */
-    void begin(TwoWire& i2cBus);
+    void begin(TwoWire& i2cBus, uint8_t i2cAddr);
 
     /**
      * readMeasurementTicks() - read sensor output. The measurement data can
@@ -349,6 +350,7 @@ class SensirionI2CScd4x {
 
   private:
     TwoWire* _i2cBus = nullptr;
+    uint8_t _i2cAddr = 0x62;
 };
 
 #endif /* SENSIRIONI2CSCD4X_H */
