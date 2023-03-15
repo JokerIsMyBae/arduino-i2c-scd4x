@@ -39,6 +39,8 @@
 #ifndef SENSIRIONI2CSCD4X_H
 #define SENSIRIONI2CSCD4X_H
 
+#define DEFAULT_I2C_ADDR 0x62
+
 #include <Wire.h>
 
 #include <SensirionCore.h>
@@ -54,7 +56,7 @@ class SensirionI2CScd4x {
      * @param i2cAddr I2C address of the sensor.
      *
      */
-    void begin(TwoWire& i2cBus, uint8_t i2cAddr);
+    void begin(TwoWire& i2cBus, uint8_t i2cAddr = DEFAULT_I2C_ADDR);
 
     /**
      * readMeasurementTicks() - read sensor output. The measurement data can
@@ -350,7 +352,7 @@ class SensirionI2CScd4x {
 
   private:
     TwoWire* _i2cBus = nullptr;
-    uint8_t _i2cAddr = 0x62;
+    uint8_t _i2cAddr;
 };
 
 #endif /* SENSIRIONI2CSCD4X_H */
