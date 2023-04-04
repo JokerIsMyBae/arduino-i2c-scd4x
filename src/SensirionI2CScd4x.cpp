@@ -165,7 +165,9 @@ uint16_t SensirionI2CScd4x::measureSingleShot() {
     }
 
     error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
-    delay(5000);
+
+    delay(1);
+
     return error;
 }
 
@@ -180,7 +182,9 @@ uint16_t SensirionI2CScd4x::powerDown() {
     }
 
     error = SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus);
+
     delay(1);
+
     return error;
 }
 
@@ -197,6 +201,8 @@ uint16_t SensirionI2CScd4x::wakeUp() {
     // Sensor does not acknowledge the wake-up call, error is ignored
     static_cast<void>(
         SensirionI2CCommunication::sendFrame(_i2cAddr, txFrame, *_i2cBus));
-    delay(20);
+
+    delay(1);
+
     return NoError;
 }

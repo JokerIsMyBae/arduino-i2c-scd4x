@@ -133,7 +133,7 @@ class SensirionI2CScd4x {
      *
      * @return 0 on success, an error code otherwise
      */
-    uint16_t measureSingleShot(void);
+    uint16_t measureSingleShot();
 
     /**
      * powerDown() - Put the sensor from idle to sleep mode to reduce current
@@ -143,7 +143,7 @@ class SensirionI2CScd4x {
      *
      * @return 0 on success, an error code otherwise
      */
-    uint16_t powerDown(void);
+    uint16_t powerDown();
 
     /**
      * wakeUp() - Wake up sensor from sleep mode to idle mode.
@@ -152,7 +152,7 @@ class SensirionI2CScd4x {
      *
      * @return 0 on success, an error code otherwise
      */
-    uint16_t wakeUp(void);
+    uint16_t wakeUp();
 
   private:
     TwoWire* _i2cBus = nullptr;
